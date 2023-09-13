@@ -1,37 +1,44 @@
-const i = document.getElementById("input-box");
-const listscontainer = document.getElementById("list-container");
-console.log(i);
+// script for buttons
+let btns = document.querySelectorAll(".digit-button");
+let allBtns = document.querySelectorAll(".button");
+let resultBox = document.querySelector("#result-box");
+let clearBtn = document.querySelector("#clear");
+let delbtn = document.querySelector("#del");
+let total = document.querySelector("#total");
+let currentInput = "";
+let btnspd = [...btns];
+let allBtnSpd = [...allBtns];
 
-function addTask() {
-  if (i.value === " ") {
-    alert("You must Write Something");
-  } else {
-    let li = document.createElement("li");
-    li.innerHTML = i.value;
-    listscontainer.appendChild(li);
-    // let span = document.createElement("span");
-    // span.innerHTML = "\u00d7";
-    // li.appendChild(span);
-  }
-  i.value = " ";
-  // saveData();
-}
-
-listscontainer.addEventListener("click", function (e) {
-  if (e.target.tagName === "LI") {
-    e.target.classList.toggle("checked");
-    // saveData();
-  } else if (e.tagname === "LI") {
-    e.remove();
-    // saveData();
-  }
+btnspd.forEach((button, i) => {
+  button.addEventListener("click", () => {
+    if (resultBox.innerHTML == "0") {
+      resultBox.innerHTML = "";
+    }
+    let value = btns[i].innerHTML;
+    resultBox.innerHTML += value;
+  });
 });
 
-// function saveData() {
-//   localStorage.setItem("data", listscontainer.innerHTML);
-// }
+function evaluate(fn) {
+  return new Function("return " + fn)();
+}
 
-// function showTask() {
-//   listscontainer.innerHTML = localStorage.getItem("data");
-// }
-// showTask();
+total.addEventListener("click", () => {
+  let allInputs = resultBox.innerHTML;
+  resultBox.innerHTML = evaluate(allInputs);
+  console.log(evaluate(allInputs));
+});
+
+clearBtn.addEventListener("click", () => {
+  resultBox.innerHTML = "0";
+});
+
+delbtn.addEventListener("click", () => {
+  currentInput = resultBox.innerHTML;
+  console.log(currentInput);
+  currentInput = currentInput.slice(0, -1);
+  resultBox.innerHTML = currentInput;
+  if (isEmpty(currentInput)) {
+    resultBox.innerHTML = "0";
+  }
+});
